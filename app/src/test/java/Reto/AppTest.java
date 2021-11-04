@@ -4,11 +4,24 @@
 package Reto;
 
 import org.junit.Test;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
 import static org.junit.Assert.*;
 
 public class AppTest {
-    @Test public void appHasAGreeting() {
+    
+    @Test
+    public void appHasAGreeting() {
         App classUnderTest = new App();
         assertNotNull("app should have a greeting", classUnderTest.getGreeting());
     }
+
+    @Test public void R (){
+        System.setProperty("webdriver.chrome.driver", "c:\\chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.get("https://www.google.com/?hl=es");
+    }
+
+
 }
