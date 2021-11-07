@@ -4,8 +4,11 @@
 package Reto;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import static org.junit.Assert.*;
 
@@ -17,11 +20,56 @@ public class AppTest {
         assertNotNull("app should have a greeting", classUnderTest.getGreeting());
     }
 
-    @Test public void R (){
-        System.setProperty("webdriver.chrome.driver", "c:\\chromedriver.exe");
+    @Test public void Registration () throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-        driver.get("https://www.google.com/?hl=es");
+        driver.get("http://automationpractice.com/index.php");
+        driver.findElement(By.className("login")).click();
+        driver.findElement(By.id("email_create")).sendKeys("brelinz10@gmail.com");
+        driver.findElement(By.id("SubmitCreate")).click();
+        //wait for next page to load
+        Thread.sleep(4000);
+        driver.findElement(By.id("id_gender1")).click();   
+        driver.findElement(By.id("customer_firstname")).sendKeys("Felipe");
+        driver.findElement(By.id("customer_lastname")).sendKeys("Barragán");
+        driver.findElement(By.id("passwd")).sendKeys("FelipeB");   
+        //Selectors Date of Birth
+        WebElement eleDay = driver.findElement(By.name("days"));
+        Select selectDay = new Select(eleDay);
+        selectDay.selectByValue("30"); // 1 to 31
+        WebElement eleMonth = driver.findElement(By.name("months"));
+        Select selectMonth = new Select(eleMonth);
+        selectMonth.selectByValue("8"); // 1 to 12
+        WebElement eleYear = driver.findElement(By.name("years"));
+        Select selectYear = new Select(eleYear);
+        selectYear.selectByValue("1995"); // 1900 to 2021
+        driver.findElement(By.id("company")).sendKeys("FB.SAS");
+        driver.findElement(By.id("address1")).sendKeys("Cl 7 3-20");
+        driver.findElement(By.id("address2")).sendKeys("Local 2");
+        driver.findElement(By.id("city")).sendKeys("Bogotá");
+        //Selector state 
+        WebElement eleState = driver.findElement(By.name("id_state"));
+        Select selectState = new Select(eleState);
+        selectState.selectByValue("35"); // 1 to 50 postcode
+        driver.findElement(By.id("postcode")).sendKeys("10100"); //maximum 5 digits
+        //Selector country 
+        WebElement eleCountry = driver.findElement(By.name("id_country"));
+        Select selectCountry = new Select(eleCountry);
+        selectCountry.selectByValue("21"); // 21
+        driver.findElement(By.id("other")).sendKeys("Other Number 333333");
+        driver.findElement(By.id("phone")).sendKeys("222222");
+        driver.findElement(By.id("phone_mobile")).sendKeys("3132519318");
+        driver.findElement(By.id("alias")).clear();
+        driver.findElement(By.id("alias")).sendKeys("Home"); 
+        driver.findElement(By.id("submitAccount")).click();
     }
 
-
+    @Test public void login () {
+        System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
+        driver.findElement(By.id("email")).sendKeys("pipe_brelinz@gmail.com");
+        driver.findElement(By.id("passwd")).sendKeys("FelipeB");
+        driver.findElement(By.id("SubmitLogin")).click();
+    }
 }
