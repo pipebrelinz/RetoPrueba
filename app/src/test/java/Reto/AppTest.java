@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
+import net.bytebuddy.build.Plugin.Engine.Dispatcher.ForParallelTransformation.WithThrowawayExecutorService;
+
 import static org.junit.Assert.*;
 
 public class AppTest {
@@ -24,15 +26,17 @@ public class AppTest {
         System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
         driver.get("http://automationpractice.com/index.php");
+        driver.manage().window().maximize();
         driver.findElement(By.className("login")).click();
-        driver.findElement(By.id("email_create")).sendKeys("brelinz10@gmail.com");
+        // change mail for each run
+        driver.findElement(By.id("email_create")).sendKeys("5201ffera@gmail.com");
         driver.findElement(By.id("SubmitCreate")).click();
         //wait for next page to load
-        Thread.sleep(4000);
+        Thread.sleep(3000);
         driver.findElement(By.id("id_gender1")).click();   
-        driver.findElement(By.id("customer_firstname")).sendKeys("Felipe");
-        driver.findElement(By.id("customer_lastname")).sendKeys("Barragán");
-        driver.findElement(By.id("passwd")).sendKeys("FelipeB");   
+        driver.findElement(By.id("customer_firstname")).sendKeys("Marco");
+        driver.findElement(By.id("customer_lastname")).sendKeys("Polo");
+        driver.findElement(By.id("passwd")).sendKeys("F54654B");   
         //Selectors Date of Birth
         WebElement eleDay = driver.findElement(By.name("days"));
         Select selectDay = new Select(eleDay);
@@ -64,12 +68,81 @@ public class AppTest {
         driver.findElement(By.id("submitAccount")).click();
     }
 
-    @Test public void login () {
+    @Test public void Login () throws InterruptedException {
         System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
+        driver.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
+        driver.manage().window().maximize();
+        driver.findElement(By.id("email")).sendKeys("pipe_brelinz@gmail.com");
+        driver.findElement(By.id("passwd")).sendKeys("FelipeB");
+        driver.findElement(By.id("SubmitLogin")).click();
+        Thread.sleep(3000);
+        driver.findElement(By.className("icon-user")).click();
+        driver.findElement(By.id("id_gender2")).click();   
+        driver.findElement(By.id("firstname")).clear();
+        driver.findElement(By.id("firstname")).sendKeys("Brayan");
+        driver.findElement(By.id("lastname")).clear();
+        driver.findElement(By.id("lastname")).sendKeys("Núñez");
+        WebElement eleMonth = driver.findElement(By.name("months"));
+        Select selectMonth = new Select(eleMonth);
+        selectMonth.selectByValue("12"); // 1 to 12
+        driver.findElement(By.id("old_passwd")).sendKeys("FelipeB");
+        driver.findElement(By.name("submitIdentity")).click();
+    }
+
+    @Test public void Contact() {
+        System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("http://automationpractice.com/index.php?controller=contact");
+        WebElement eleSubHeading = driver.findElement(By.name("id_contact"));
+        Select selectSubHeading = new Select(eleSubHeading);
+        selectSubHeading.selectByValue("2"); // 0, 1 or 2
+        driver.findElement(By.id("email")).sendKeys("pruef@gmail.com");
+        driver.findElement(By.id("id_order")).sendKeys("It's order");
+        driver.findElement(By.id("message")).sendKeys("It's message");
+        driver.findElement(By.id("submitMessage")).click();
+    }
+
+    @Test public void ContactLogin () throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
         driver.get("http://automationpractice.com/index.php?controller=authentication&back=my-account");
         driver.findElement(By.id("email")).sendKeys("pipe_brelinz@gmail.com");
         driver.findElement(By.id("passwd")).sendKeys("FelipeB");
         driver.findElement(By.id("SubmitLogin")).click();
+        Thread.sleep(3000);
+        driver.findElement(By.id("contact-link")).click();
+        Thread.sleep(3000);
+        WebElement eleSubHeading = driver.findElement(By.name("id_contact"));
+        Select selectSubHeading = new Select(eleSubHeading);
+        selectSubHeading.selectByValue("1"); // 0, 1 or 2
+        // assigned value for each completed order
+        WebElement eleOrder = driver.findElement(By.name("id_order"));
+        Select selectOrder = new Select(eleOrder);
+        selectOrder.selectByValue("375334"); // value 375334
+        WebElement eleProduct = driver.findElement(By.name("id_product"));
+        Select selectProduct = new Select(eleProduct);
+        selectProduct.selectByValue("3"); // o, 2 or 3
+        driver.findElement(By.id("message")).sendKeys("It's message");
+        driver.findElement(By.id("submitMessage")).click();
+    }
+
+    @Test public void Search() throws InterruptedException {
+        System.setProperty("webdriver.chrome.driver", "../drive/chromedriver.exe");
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.get("http://automationpractice.com/index.php");
+        driver.findElement(By.id("search_query_top")).sendKeys("Dress");
+        driver.findElement(By.name("submit_search")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.id("search_query_top")).clear();
+        driver.findElement(By.id("search_query_top")).sendKeys("1598xyz");
+        driver.findElement(By.name("submit_search")).click();
+        Thread.sleep(5000);
+        driver.findElement(By.id("search_query_top")).clear();
+        driver.findElement(By.id("search_query_top")).sendKeys("Dres");
+        driver.findElement(By.name("submit_search")).click();
     }
 }
